@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+/*инициализация переменных*/
 const int led_pin{39};
 bool light_on{false};
 short numbersCliks{0};
@@ -14,8 +15,10 @@ void setup()
 
 void loop() 
 {
+    
     bool currentButtonState = digitalRead(17);
 
+    /*проверка нажатия кнопки, без проверки неработает*/
     if(currentButtonState != lastButtonState)
     {
         delay(50);
