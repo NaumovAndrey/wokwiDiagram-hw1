@@ -4,6 +4,7 @@
 
 /*инициализация переменных*/
 const int led_pin{39};
+const int button_pin{17};
 short numbersCliks{0};
 const short max_numbers_cliks{1};
 int power{255};
@@ -49,7 +50,7 @@ void loop()
         Serial.println(power);
     }
 
-    bool currentButtonState = digitalRead(17);
+    bool currentButtonState = digitalRead(button_pin);
 
     /*проверка нажатия кнопки, без проверки неработает*/
     if(currentButtonState != lastButtonState)
