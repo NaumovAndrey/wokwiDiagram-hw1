@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <string>
+#include <vector>
 
 /*инициализация переменных*/
 const int led_pin{39};
@@ -9,6 +10,20 @@ int power{255};
 std::string buffer = "";
 
 bool lastButtonState = LOW;
+std::vector<int> commands;
+const size_t maxCommands{4};
+unsigned long currentTime{millis()};
+unsigned long  printInterval{20000};
+
+void const timerSleep(int command)
+{
+    if(commands.size() == maxCommands)
+    {
+        commands.erase(commands.begin());
+    }
+    commands.push_back(command);
+}
+
 
 void setup() 
 {
