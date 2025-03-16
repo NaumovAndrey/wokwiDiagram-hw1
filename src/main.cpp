@@ -12,12 +12,12 @@ std::string buffer = "";
 bool lastButtonState = LOW;
 std::vector<int> commands;
 const size_t maxCommands{4};
-unsigned long currentTime{millis()};
+unsigned long currentTime{0};
 unsigned long  printInterval{20000};
 
 void const timerSleep(int command)
 {
-    if(commands.size() == maxCommands)
+    if(commands.size() >= maxCommands)
     {
         commands.erase(commands.begin());
     }
@@ -43,6 +43,7 @@ void loop()
         }
 
         power = std::stoi(buffer);
+        timerSleep(power);
 
         Serial.print("Светодиод: ");
         Serial.println(power);
@@ -67,4 +68,14 @@ void loop()
         }
     }
     lastButtonState = currentButtonState;
+
+    if (millis() - currentTime >= printInterval)
+    {
+        Serial.println("Последние команды:");
+        for (int cmd : commands)
+        {
+            Serial.println(cmd);
+        }
+        currentTime = millis();
+    }
 }
