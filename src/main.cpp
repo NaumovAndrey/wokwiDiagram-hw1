@@ -6,11 +6,14 @@
 const int led_pin{39};
 const int button_pin{17};
 short numbersCliks{0};
-const short max_numbers_cliks{1};
+const short max_numbers_cliks{2};
 int power{255};
 std::string buffer = "";
 
-bool lastButtonState = LOW;
+bool lastButtonState = LOW; //состояние кнопки
+bool currentButtonState = LOW; //состояние кнопки
+bool light_on{false}; //состояние светодиода
+
 std::vector<int> commands;
 const size_t maxCommands{4};
 unsigned long currentTime{0};
@@ -50,21 +53,25 @@ void loop()
         Serial.println(power);
     }
 
-    bool currentButtonState = digitalRead(button_pin);
+    currentButtonState = digitalRead(button_pin);
 
     /*проверка нажатия кнопки, без проверки неработает*/
     if(currentButtonState != lastButtonState)
     {
         delay(50);
-        if(currentButtonState == HIGH)
+
+        if(currentButtonState == HIGH && !light_on)
         {
             numbersCliks++;
+
             if(numbersCliks >= max_numbers_cliks)
             {
                 analogWrite(led_pin, power);
+                light_on = true;
                 delay(1000);
                 analogWrite(led_pin, 0);
                 numbersCliks = 0;
+                light_on = false;
             }
         }
     }
