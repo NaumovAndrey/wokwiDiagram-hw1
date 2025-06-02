@@ -25,7 +25,9 @@ unsigned long printInterval{20000};
 /* Функции */
 int getPower();
 void ledControl(int power, int ledPin, int buttonPin); // управление светодиодом
-void timerSleep(int command);
+void timerSleep(int command); // история команд
+
+double mean(std::vector<int> &); //Добавьте пользовательскую функцию mean, которая в качестве аргумента принимает вектор целочисленных значений и возвращает арифметическое среднее по массиву
 
 void timerSleep(int command)
 {
@@ -80,7 +82,7 @@ void loop()
         Serial.println(output);
         currentTime = millis();
     }
-    
+
 }
 
 int getPower()
@@ -103,6 +105,12 @@ int getPower()
             timerSleep(power);
             Serial.print("Светодиод: ");
             Serial.println(power);
+
+            if (!commands.empty()){
+                Serial.print("Среднее значение мощности = ");
+                Serial.println(mean(commands));
+            }
+
         } catch (...) {
             Serial.println("Ошибка преобразования числа.");
         }
@@ -142,4 +150,17 @@ void ledControl(int power, int ledPin, int buttonPin)
         }
     }
     lastButtonState = currentButtonState;
+}
+
+double mean(std::vector<int> &values)
+{
+    if (values.empty()) return 0.0;
+
+    double sum = 0;
+    for (int value : values)
+    {
+        sum += value;
+    }
+
+    return sum / values.size();
 }
